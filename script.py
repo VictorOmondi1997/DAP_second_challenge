@@ -18,7 +18,7 @@ def calculate(url):
     return {
         "number_functional": (data['water_point_condition']=='functioning').sum(),
         "number_water_points":data.groupby('communities_villages').size().to_dict(),
-        "community_ranking":data.groupby('communities_villages')['water_point_condition'].value_counts(normalize=True).unstack().assign(broken_pct=lambda x: x['broken'], rank=lambda x: (100-x['broken']).rank(method='max', na_option='bottom')).reset_index().set_index(['communities_villages', 'broken_pct'])['rank'].sort_values().astype(int).to_dict()
+        "community_ranking":data.groupby('communities_villages')['water_point_condition'].value_counts(normalize=True).unstack()['broken'].fillna(0).sort_values(ascending=False).to_dict()
     }
 
 if __name__ == "__main__":
